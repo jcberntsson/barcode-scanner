@@ -45,7 +45,7 @@ public class ScoreView extends LinearLayout {
         scoreText = (TextView) findViewById(R.id.scoreText);
     }
 
-    public void setScore(int score) {
+    public void setScore(String score) {
         scoreText.setText(score + " / 10");
     }
 

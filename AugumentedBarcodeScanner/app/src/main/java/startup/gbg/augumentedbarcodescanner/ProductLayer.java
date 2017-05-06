@@ -59,11 +59,11 @@ public class ProductLayer extends RelativeLayout {
     }
 
     public void setProduct(Product product) {
-
-        healthScoreView.setScore(7);
-        environmentScoreView.setScore(5);
-        socialScoreView.setScore(8);
-        economicScoreView.setScore(3);
+        healthScoreView.setScore(product.gtin.substring(12,13));
+        environmentScoreView.setScore(product.gtin.substring(11,12));
+        socialScoreView.setScore(product.gtin.substring(10,11));
+        economicScoreView.setScore(product.gtin.substring(9,10
+        ));
         productTitle.setText(product.name);
     }
 }
