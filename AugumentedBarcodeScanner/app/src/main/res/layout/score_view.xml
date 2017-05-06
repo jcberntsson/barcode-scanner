@@ -20,6 +20,10 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:textColor="#ffffff"
+        android:shadowColor="@color/text_shadow"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
         android:layout_gravity="center"
         tools:text="8 / 10" />
 

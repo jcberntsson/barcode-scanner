@@ -11,6 +11,10 @@
         android:textSize="30sp"
         android:layout_height="wrap_content"
         android:textColor="#ffffff"
+        android:shadowColor="@color/text_shadow"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
         tools:text="Ahlgrens bilar"/>
 
     <LinearLayout
@@ -23,12 +27,14 @@
         <startup.gbg.augumentedbarcodescanner.ScoreView
             android:id="@+id/healthScore"
             android:layout_width="match_parent"
-            android:layout_height="80dp"></startup.gbg.augumentedbarcodescanner.ScoreView>
+            android:layout_height="80dp"
+        />
 
         <startup.gbg.augumentedbarcodescanner.ScoreView
             android:id="@+id/environmentScore"
             android:layout_width="match_parent"
-            android:layout_height="80dp"></startup.gbg.augumentedbarcodescanner.ScoreView>
+            android:layout_height="80dp"
+        />
 
     </LinearLayout>
     <LinearLayout
@@ -41,12 +47,14 @@
         <startup.gbg.augumentedbarcodescanner.ScoreView
             android:id="@+id/socialScore"
             android:layout_width="80dp"
-            android:layout_height="80dp"></startup.gbg.augumentedbarcodescanner.ScoreView>
+            android:layout_height="80dp"
+        />
 
         <startup.gbg.augumentedbarcodescanner.ScoreView
             android:id="@+id/economicScore"
             android:layout_width="match_parent"
-            android:layout_height="80dp"></startup.gbg.augumentedbarcodescanner.ScoreView>
+            android:layout_height="80dp"
+        />
 
     </LinearLayout>
 
