@@ -38,6 +38,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class MainActivity extends Activity {
     private TextureView textureView;
@@ -53,9 +54,12 @@ public class MainActivity extends Activity {
     private HandlerThread mBackgroundThread;
     private BarcodeDetector detector;
     private API service;
+    private Thread mDecodeThread;
+
+    private ConcurrentLinkedDeque<Bitmap> bitmapsToProcess = new ConcurrentLinkedDeque<>();
 
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
-        int counter = 0;
+        int surfaceUpdates = 0;
 
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -75,24 +79,21 @@ public class MainActivity extends Activity {
 
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-            counter++;
 
-            if (counter % 30 == 0)
+            if (++surfaceUpdates % 15 == 0)
+                bitmapsToProcess.add(textureView.getBitmap());
+            /*if (++surfaceUpdates % 30 == 0)
             {
                 Bitmap bitmap = textureView.getBitmap();
                 Frame frame = new Frame.Builder().setBitmap(bitmap).build();
                 SparseArray<Barcode> barcodes = detector.detect(frame);
                 Log.d(TAG, "Barcode scan results: " + barcodes.size());
                 for(int i = 0; i < barcodes.size(); i++){
-                    int keyAt = barcodes.keyAt(i);
-                    Barcode b = barcodes.get(keyAt);
+                    Barcode b = barcodes.valueAt(i);
 
-                    if (b != null)
-                        Log.d(TAG, "Barcode scanned: " + b.rawValue);
-                    else
-                        Log.d(TAG, "Barcode scanned is null");
+                    Log.d(TAG, "Barcode scanned: " + b.rawValue);
                 }
-            }
+            }*/
         }
     };
 
@@ -232,6 +233,47 @@ public class MainActivity extends Activity {
         }
     }
 
+    protected void startDecodeThread() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                while(true)
+                {
+                    if (bitmapsToProcess.size() == 0)
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    else
+                    {
+                        Bitmap bitmap = bitmapsToProcess.pop();
+                        Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+                        SparseArray<Barcode> barcodes = detector.detect(frame);
+                        Log.d(TAG, "Barcode scan results: " + barcodes.size());
+                        for(int i = 0; i < barcodes.size(); i++){
+                            Barcode b = barcodes.valueAt(i);
+
+                            Log.d(TAG, "Barcode scanned: " + b.rawValue);
+                        }
+                    }
+                }
+            }
+        };
+        mDecodeThread = new Thread(runnable);
+        mDecodeThread.start();
+    }
+
+    protected void stopDecodeThread() {
+        mDecodeThread.interrupt();
+        try {
+            mDecodeThread.join();
+            mDecodeThread = null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     protected void startBackgroundThread() {
         mBackgroundThread = new HandlerThread("Camera Background");
         mBackgroundThread.start();
@@ -249,11 +291,19 @@ public class MainActivity extends Activity {
         }
     }
 
+    private void closeCamera() {
+        if (null != cameraDevice) {
+            cameraDevice.close();
+            cameraDevice = null;
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         Log.e(TAG, "onResume");
         startBackgroundThread();
+        startDecodeThread();
         if (textureView.isAvailable()) {
             openCamera();
         } else {
@@ -264,6 +314,8 @@ public class MainActivity extends Activity {
     protected void onPause() {
         Log.e(TAG, "onPause");
         stopBackgroundThread();
+        stopDecodeThread();
+        closeCamera();
         super.onPause();
     }
 }
