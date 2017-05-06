@@ -246,6 +246,7 @@ public class MainActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                productLayer.setVisibility(View.INVISIBLE);
                                 Toast.makeText(getBaseContext(), "Yo, this product doesn't exists man!!", Toast.LENGTH_LONG).show();
 
                             }
