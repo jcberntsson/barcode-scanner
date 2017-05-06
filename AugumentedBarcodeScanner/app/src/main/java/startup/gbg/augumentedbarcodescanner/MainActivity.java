@@ -84,8 +84,8 @@ public class MainActivity extends Activity {
 
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-            if (++surfaceUpdates % 10 == 0)
-                bitmapsToProcess.add(textureView.getBitmap());
+            //if (++surfaceUpdates % 10 == 0)
+            //    bitmapsToProcess.add(textureView.getBitmap());
         }
     };
 
@@ -274,6 +274,8 @@ public class MainActivity extends Activity {
                 return;
             }
             manager.openCamera(cameraId, stateCallback, null);
+
+            startDecodeThread();
         } catch (CameraAccessException e) {
             Log.e(TAG, "openCamera error");
             e.printStackTrace();
@@ -297,24 +299,21 @@ public class MainActivity extends Activity {
             public void run() {
                 while(true)
                 {
-                    if (bitmapsToProcess.size() == 0)
-                        try {
-                            Thread.sleep(50);
-                        } catch (InterruptedException ignored) {
-                             break;
-                        }
-                    else
-                    {
-                        Bitmap bitmap = bitmapsToProcess.pop();
-                        Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-                        SparseArray<Barcode> barcodes = detector.detect(frame);
-                        Log.d(TAG, "Barcode scan results: " + barcodes.size());
-                        for(int i = 0; i < barcodes.size(); i++){
-                            Barcode b = barcodes.valueAt(i);
-                            takeCareOfEAN(b.rawValue);
-                            Log.d(TAG, "Barcode scanned: " + b.rawValue);
-                        }
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ignored) {
+                        break;
                     }
+                    Bitmap bitmap = textureView.getBitmap();
+                    Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+                    SparseArray<Barcode> barcodes = detector.detect(frame);
+                    for(int i = 0; i < barcodes.size(); i++)
+                    {
+                        Barcode b = barcodes.valueAt(i);
+                        takeCareOfEAN(b.rawValue);
+                        Log.d(TAG, "Barcode found with gtin: " + b.rawValue);
+                    }
+
                 }
             }
         };
@@ -323,12 +322,15 @@ public class MainActivity extends Activity {
     }
 
     protected void stopDecodeThread() {
-        mDecodeThread.interrupt();
-        try {
-            mDecodeThread.join();
-            mDecodeThread = null;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (mDecodeThread != null)
+        {
+            mDecodeThread.interrupt();
+            try {
+                mDecodeThread.join();
+                mDecodeThread = null;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -362,7 +364,6 @@ public class MainActivity extends Activity {
         mIsPaused = false;
         Log.e(TAG, "onResume");
         startBackgroundThread();
-        startDecodeThread();
         if (textureView.isAvailable()) {
             openCamera();
         } else {
