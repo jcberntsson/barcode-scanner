@@ -73,7 +73,7 @@ class PriceListAdapter extends RecyclerView.Adapter<PriceListAdapter.ViewHolder>
     private static class PriceListComparator implements Comparator<PriceData> {
         @Override
         public int compare(PriceData price, PriceData p1) {
-            return Long.compare(p1.price.amount, price.price.amount);
+            return Long.compare(price.price.amount, p1.price.amount);
         }
     }
 
