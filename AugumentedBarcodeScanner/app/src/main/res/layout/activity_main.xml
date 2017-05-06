@@ -13,6 +13,19 @@
         android:layout_height="match_parent"
     />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:layout_marginTop="5dp"
+        android:textSize="14sp"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:shadowColor="@color/text_shadow"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="@string/bar" />
+
     <startup.gbg.augumentedbarcodescanner.ProductLayer
         android:id="@+id/productLayer"
         android:visibility="invisible"
