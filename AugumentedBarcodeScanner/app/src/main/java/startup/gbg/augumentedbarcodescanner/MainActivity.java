@@ -146,7 +146,7 @@ public class MainActivity extends Activity {
         findViewById(R.id.economicScore).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                productLayer.openPrices();
+                productLayer.togglePrices();
             }
         });
         findViewById(R.id.pricesLayer).setClickable(true);
@@ -249,6 +249,7 @@ public class MainActivity extends Activity {
                         productLayer.post(new Runnable() {
                             @Override
                             public void run() {
+                                productLayer.hidePricesLayer();
                                 productLayer.setVisibility(View.VISIBLE);
                                 productLayer.setProduct(product);
                             }

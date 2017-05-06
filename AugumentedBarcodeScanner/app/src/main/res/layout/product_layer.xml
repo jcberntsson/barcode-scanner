@@ -51,10 +51,12 @@
             android:layout_height="80dp"
         />
 
-        <startup.gbg.augumentedbarcodescanner.ScoreView
+        <ImageView
             android:id="@+id/economicScore"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:src="@drawable/economy_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
             android:clickable="true"
         />
 

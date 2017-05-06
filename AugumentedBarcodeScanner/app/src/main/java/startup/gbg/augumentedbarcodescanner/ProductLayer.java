@@ -1,9 +1,11 @@
 package startup.gbg.augumentedbarcodescanner;
 
 import android.content.Context;
+import android.media.Image;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ public class ProductLayer extends RelativeLayout {
     ScoreView healthScoreView;
     ScoreView environmentScoreView;
     ScoreView socialScoreView;
-    ScoreView economicScoreView;
+    ImageView economicScoreView;
     TextView productTitle;
     PricesLayer pricesLayer;
     private API backendService;
@@ -64,9 +66,8 @@ public class ProductLayer extends RelativeLayout {
         socialScoreView = (ScoreView) findViewById(R.id.socialScore);
         socialScoreView.setScoreType(SOCIAL);
 
-        economicScoreView = (ScoreView) findViewById(R.id.economicScore);
+        economicScoreView = (ImageView) findViewById(R.id.economicScore);
 
-        economicScoreView.setScoreType(ECONOMY);
 
         productTitle = (TextView) findViewById(R.id.productTitle);
 
@@ -77,8 +78,6 @@ public class ProductLayer extends RelativeLayout {
         healthScoreView.setScore(product.gtin.substring(12,13));
         environmentScoreView.setScore(product.gtin.substring(11,12));
         socialScoreView.setScore(product.gtin.substring(10,11));
-        economicScoreView.setScore(product.gtin.substring(9,10
-        ));
         productTitle.setText(product.name);
     }
 
@@ -102,7 +101,16 @@ public class ProductLayer extends RelativeLayout {
         }).start();
     }
 
-    public void openPrices() {
+    public void hidePricesLayer() {
+        pricesLayer.setVisibility(GONE);
+    }
+
+    public void togglePrices() {
+        if(pricesLayer.getVisibility() == VISIBLE) {
+            pricesLayer.setVisibility(GONE);
+            return;
+        }
+
         if(product == null || backendService == null) {
             return;
         }
@@ -110,13 +118,13 @@ public class ProductLayer extends RelativeLayout {
             @Override
             public void onResponse(Call<LinkedList<PriceData>> call, final Response<LinkedList<PriceData>> response) {
                 pricesLayer.post(new Runnable() {
-                @Override
-                  public void run() {
-                      LinkedList<PriceData> prices = response.body();
-                       pricesLayer.setVisibility(VISIBLE);
-                       pricesLayer.setPrices(prices);
+                    @Override
+                    public void run() {
+                        LinkedList<PriceData> prices = response.body();
+                        pricesLayer.setVisibility(VISIBLE);
+                        pricesLayer.setPrices(prices);
                     }
-                  });
+                });
             }
 
             @Override
@@ -124,10 +132,5 @@ public class ProductLayer extends RelativeLayout {
 
             }
         });
-
-    }
-
-    public void hidePricesLayer() {
-        pricesLayer.setVisibility(GONE);
     }
 }
