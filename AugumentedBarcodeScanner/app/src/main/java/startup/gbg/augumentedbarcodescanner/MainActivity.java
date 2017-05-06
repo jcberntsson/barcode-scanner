@@ -241,8 +241,16 @@ public class MainActivity extends Activity {
                                 productLayer.setProduct(product);
                             }
                         });
-                    }
 
+                    }else{
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getBaseContext(), "Yo, this product doesn't exists man!!", Toast.LENGTH_LONG).show();
+
+                            }
+                        });
+                    }
                 }catch (IOException e){
                     Log.d(TAG, "N[got gick fel yoo: "+e.getMessage());
                 }
