@@ -62,7 +62,6 @@ public class ScoreView extends LinearLayout {
                 break;
             case ECONOMY:
                 icon.setImageResource(R.drawable.economy_icon);
-                scoreText.setVisibility(GONE);
                 break;
             default:
                 icon.setImageResource(R.drawable.carrot_icon);
