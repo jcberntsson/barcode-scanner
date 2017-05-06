@@ -78,7 +78,7 @@ public class ProductLayer extends RelativeLayout {
         healthScoreView.setScore(product.gtin.substring(12,13));
         environmentScoreView.setScore(product.gtin.substring(11,12));
         socialScoreView.setScore(product.gtin.substring(10,11));
-        economicScoreView.setScore(product.gtin.substring(9,10s));
+        economicScoreView.setScore(product.gtin.substring(9,10));
         productTitle.setText(product.name);
     }
 
