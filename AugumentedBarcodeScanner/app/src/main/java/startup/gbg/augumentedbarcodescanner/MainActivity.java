@@ -43,6 +43,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.view.View.INVISIBLE;
+
 public class MainActivity extends Activity {
     private String TAG = "MainActivity";
 
@@ -138,11 +140,21 @@ public class MainActivity extends Activity {
 
         service = retrofit.create(API.class);
 
+        productLayer.setBackendService(service);
+
 
         findViewById(R.id.economicScore).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                productLayer.openPrices();
+            }
+        });
+        findViewById(R.id.pricesLayer).setClickable(true);
+        findViewById(R.id.pricesLayer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "HEJOO", Toast.LENGTH_SHORT).show();
+                productLayer.hidePricesLayer();
             }
         });
     }
@@ -246,7 +258,7 @@ public class MainActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                productLayer.setVisibility(View.INVISIBLE);
+                                productLayer.setVisibility(INVISIBLE);
                                 Toast.makeText(getBaseContext(), "Yo, this product doesn't exists man!!", Toast.LENGTH_LONG).show();
 
                             }

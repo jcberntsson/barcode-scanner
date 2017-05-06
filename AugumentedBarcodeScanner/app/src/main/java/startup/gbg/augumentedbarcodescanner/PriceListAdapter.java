@@ -38,7 +38,9 @@ class PriceListAdapter extends RecyclerView.Adapter<PriceListAdapter.ViewHolder>
 
     public void setPrices(List<PriceData> prices) {
         dataset.clear();
-        dataset.addAll(prices);
+        for (PriceData price : prices) {
+            dataset.add(price);
+        }
         notifyDataSetChanged();
     }
 
@@ -53,8 +55,8 @@ class PriceListAdapter extends RecyclerView.Adapter<PriceListAdapter.ViewHolder>
     public void onBindViewHolder(ViewHolder holder, int position) {
         PriceData price = dataset.get(position);
 
-        holder.storeName.setText(price.store.name);
-        holder.price.setText(price.price.amount);
+        holder.storeName.setText(price.store.chain.name());
+        holder.price.setText(price.price.amount + "");
     }
 
     @Override

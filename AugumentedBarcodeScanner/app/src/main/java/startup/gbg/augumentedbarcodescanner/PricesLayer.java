@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.LinkedList;
@@ -13,7 +15,7 @@ import java.util.LinkedList;
  * Created by simonarneson on 2017-05-06.
  */
 
-public class PricesLayer extends RelativeLayout {
+public class PricesLayer extends LinearLayout {
 
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView priceList;
@@ -38,13 +40,16 @@ public class PricesLayer extends RelativeLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.prices_layer, this);
 
+        priceList = (RecyclerView) findViewById(R.id.list);
+
         layoutManager = new LinearLayoutManager(getContext());
         priceList.setLayoutManager(layoutManager);
 
         adapter = new PriceListAdapter(context);
+        priceList.setAdapter(adapter);
     }
 
-    public void setPrice(LinkedList<PriceData> prices) {
+    public void setPrices(LinkedList<PriceData> prices) {
         adapter.setPrices(prices);
     }
 }

@@ -60,11 +60,15 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <startup.gbg.augumentedbarcodescanner.PricesLayer
+        android:id="@+id/pricesLayer"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:layout_width="300dp"
+        android:layout_height="700dp"
         android:visibility="gone">
 
-    </LinearLayout>
+    </startup.gbg.augumentedbarcodescanner.PricesLayer>
 
 </RelativeLayout>
