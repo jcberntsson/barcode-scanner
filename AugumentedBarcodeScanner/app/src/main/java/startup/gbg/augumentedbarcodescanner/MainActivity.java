@@ -137,6 +137,14 @@ public class MainActivity extends Activity {
                 .build();
 
         service = retrofit.create(API.class);
+
+
+        findViewById(R.id.economicScore).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "HEJOO", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     protected void createCameraPreview() {
