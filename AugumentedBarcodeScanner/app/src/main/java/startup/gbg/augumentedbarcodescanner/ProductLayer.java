@@ -58,12 +58,12 @@ public class ProductLayer extends RelativeLayout {
 
     }
 
-    public void setProduct() {
+    public void setProduct(Product product) {
 
         healthScoreView.setScore(7);
         environmentScoreView.setScore(5);
         socialScoreView.setScore(8);
         economicScoreView.setScore(3);
-        productTitle.setText("Ahlgrens bilar");
+        productTitle.setText(product.name);
     }
 }
