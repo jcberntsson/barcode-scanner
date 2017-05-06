@@ -32,12 +32,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class MainActivity extends Activity {
@@ -48,6 +53,7 @@ public class MainActivity extends Activity {
     protected CameraDevice cameraDevice;
     protected CameraCaptureSession cameraCaptureSessions;
     protected CaptureRequest.Builder captureRequestBuilder;
+    private HashMap<String, Long> registeredEANs = new HashMap<>();
     private Size imageDimension;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private Handler mBackgroundHandler;
@@ -143,18 +149,7 @@ public class MainActivity extends Activity {
 
         service = retrofit.create(API.class);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Call<LinkedList<Product>> productCall =  service.listByGTIN("07310350109906");
-                try {
-                    LinkedList<Product> products = productCall.execute().body();
-                    Log.d(TAG, "Hittade : "+products.size() + " produkter yooo!");
-                }catch (IOException e){
-                    Log.d(TAG, "N[got gick fel yoo: "+e.getMessage());
-                }
-            }
-        }).start();
+
 
 
     }
@@ -199,6 +194,59 @@ public class MainActivity extends Activity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public void getPricesForProduct(final Product p, final Callback<LinkedList<PriceData>> callback){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Call<LinkedList<PriceData>> priceCall =  service.getPrices(p.id);
+                try {
+                    Response<LinkedList<PriceData>> res = priceCall.execute();
+                    callback.onResponse(priceCall,res);
+                    Log.d(TAG, "Hittade : "+res.body().size() + " produkter yooo!");
+                }catch (IOException e){
+                    Log.d(TAG, "N[got gick fel yoo: "+e.getMessage());
+                }
+            }
+        }).start();
+    }
+
+    public void takeCareOfEAN(String ean){
+        while(ean.length() < 14){
+            ean = "0" + ean;
+        }
+
+
+
+        if(registeredEANs.containsKey(ean)){
+            long lastTime = registeredEANs.get(ean);
+            if(System.currentTimeMillis()-lastTime < 10000){
+                return;
+            }else{
+                registeredEANs.remove(ean);
+            }
+        }
+        registeredEANs.put(ean,System.currentTimeMillis());
+
+        final String coolEAN = ean;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Call<LinkedList<Product>> productCall =  service.listByGTIN(coolEAN);
+                try {
+                    LinkedList<Product> products = productCall.execute().body();
+
+                    if(products.size()>0){
+                        Log.d(TAG, "Hittade : "+products.get(0).name);
+                    }
+
+                }catch (IOException e){
+                    Log.d(TAG, "N[got gick fel yoo: "+e.getMessage());
+                }
+            }
+        }).start();
     }
 
     private void openCamera() {
@@ -253,7 +301,7 @@ public class MainActivity extends Activity {
                         Log.d(TAG, "Barcode scan results: " + barcodes.size());
                         for(int i = 0; i < barcodes.size(); i++){
                             Barcode b = barcodes.valueAt(i);
-
+                            takeCareOfEAN(b.rawValue);
                             Log.d(TAG, "Barcode scanned: " + b.rawValue);
                         }
                     }

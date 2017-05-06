@@ -1,5 +1,7 @@
 package startup.gbg.augumentedbarcodescanner;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.LinkedList;
 
 /**
@@ -10,69 +12,25 @@ import java.util.LinkedList;
 
 public class Product {
 
-    private String Id;
+    public String id;
 
-    private String GTIN;
+    public String gtin;
 
-    private String Name ;
+    public String name ;
 
-    private String Name2 ;
+    public String name2 ;
 
-    private String Manufacturer;
+    public String manufacturer;
 
-    private UnitType Unit;
+    public UnitType unit;
 
-    private double NumberOfItems ;
+    public double numberOfItems ;
 
-    private int AmountOfUnits;
+    public int amountOfUnits;
 
-    private double IncrementValue ;
+    public double incrementValue ;
 
-    private String DataText;
+    public String dataText;
 
-    private LinkedList<String> Categories;
-
-    public String getId() {
-        return Id;
-    }
-
-    public String getGTIN() {
-        return GTIN;
-    }
-
-    public String getName() {
-        return Name;
-    }
-
-    public String getName2() {
-        return Name2;
-    }
-
-    public String getManufacturer() {
-        return Manufacturer;
-    }
-
-    public UnitType getUnit() {
-        return Unit;
-    }
-
-    public double getNumberOfItems() {
-        return NumberOfItems;
-    }
-
-    public int getAmountOfUnits() {
-        return AmountOfUnits;
-    }
-
-    public double getIncrementValue() {
-        return IncrementValue;
-    }
-
-    public String getDataText() {
-        return DataText;
-    }
-
-    public LinkedList<String> getCategories() {
-        return Categories;
-    }
+    public LinkedList<String> categories;
 }

@@ -16,4 +16,8 @@ public interface API {
 
     @GET("product/GTIN")
     Call<LinkedList<Product>> listByGTIN(@Query("q") String GTIN);
+
+
+    @GET("product/{id}/lastprices")
+    Call<LinkedList<PriceData>> getPrices(@Path("id") String productID);
 }
