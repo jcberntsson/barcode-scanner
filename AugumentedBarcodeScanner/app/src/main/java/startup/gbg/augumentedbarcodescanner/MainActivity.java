@@ -20,11 +20,17 @@ import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+
+import static startup.gbg.augumentedbarcodescanner.ScoreType.ECONOMY;
+import static startup.gbg.augumentedbarcodescanner.ScoreType.ENVIRONMENT;
+import static startup.gbg.augumentedbarcodescanner.ScoreType.HEALTH;
+import static startup.gbg.augumentedbarcodescanner.ScoreType.SOCIAL;
 
 public class MainActivity extends Activity {
     private TextureView textureView;
@@ -39,6 +45,8 @@ public class MainActivity extends Activity {
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
+    private ProductLayer productLayer;
+
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -48,16 +56,16 @@ public class MainActivity extends Activity {
 
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-            // Transform you image captured size according to the surface width and height
         }
 
         @Override
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
             return false;
         }
 
         @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+
         }
     };
 
@@ -90,6 +98,10 @@ public class MainActivity extends Activity {
         textureView = (TextureView) findViewById(R.id.texture);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
+
+        productLayer = (ProductLayer) findViewById(R.id.productLayer);
+        productLayer.setProduct();
+
     }
 
     protected void createCameraPreview() {

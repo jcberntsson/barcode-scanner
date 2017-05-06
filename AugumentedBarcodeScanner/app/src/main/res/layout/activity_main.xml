@@ -10,6 +10,11 @@
         android:id="@+id/texture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        />
+    <startup.gbg.augumentedbarcodescanner.ProductLayer
+        android:id="@+id/productLayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></startup.gbg.augumentedbarcodescanner.ProductLayer>
 
 </RelativeLayout>
