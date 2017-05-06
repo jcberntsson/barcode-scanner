@@ -237,6 +237,7 @@ public class MainActivity extends Activity {
                         productLayer.post(new Runnable() {
                             @Override
                             public void run() {
+                                productLayer.setVisibility(View.VISIBLE);
                                 productLayer.setProduct(product);
                             }
                         });
