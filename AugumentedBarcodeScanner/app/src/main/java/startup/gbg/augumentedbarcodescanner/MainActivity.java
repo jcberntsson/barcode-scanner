@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -18,9 +19,14 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 import android.util.Size;
+import android.util.SparseArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Toast;
+
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,8 +44,11 @@ public class MainActivity extends Activity {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+    private BarcodeDetector detector;
 
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
+        int counter = 0;
+
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
             //open your camera here
@@ -58,6 +67,24 @@ public class MainActivity extends Activity {
 
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+            counter++;
+
+            if (counter % 30 == 0)
+            {
+                Bitmap bitmap = textureView.getBitmap();
+                Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+                SparseArray<Barcode> barcodes = detector.detect(frame);
+                Log.d(TAG, "Barcode scan results: " + barcodes.size());
+                for(int i = 0; i < barcodes.size(); i++){
+                    int keyAt = barcodes.keyAt(i);
+                    Barcode b = barcodes.get(keyAt);
+
+                    if (b != null)
+                        Log.d(TAG, "Barcode scanned: " + b.rawValue);
+                    else
+                        Log.d(TAG, "Barcode scanned is null");
+                }
+            }
         }
     };
 
@@ -65,7 +92,7 @@ public class MainActivity extends Activity {
         @Override
         public void onOpened(@NotNull CameraDevice camera) {
             //This is called when the camera is open
-            Log.e(TAG, "onOpened");
+            Log.e(TAG, "Camera onOpened");
             cameraDevice = camera;
             createCameraPreview();
         }
@@ -90,6 +117,15 @@ public class MainActivity extends Activity {
         textureView = (TextureView) findViewById(R.id.texture);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
+
+        detector =
+                new BarcodeDetector.Builder(getApplicationContext())
+                        .setBarcodeFormats(Barcode.EAN_13 | Barcode.EAN_8)
+                        .build();
+        if(!detector.isOperational()){
+            Toast.makeText(MainActivity.this, "Could not set up barcode detector!", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     protected void createCameraPreview() {
