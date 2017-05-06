@@ -47,6 +47,13 @@ public class PricesLayer extends LinearLayout {
 
         adapter = new PriceListAdapter(context);
         priceList.setAdapter(adapter);
+
+        adapter.setItemClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PricesLayer.this.setVisibility(INVISIBLE);
+            }
+        });
     }
 
     public void setPrices(LinkedList<PriceData> prices) {

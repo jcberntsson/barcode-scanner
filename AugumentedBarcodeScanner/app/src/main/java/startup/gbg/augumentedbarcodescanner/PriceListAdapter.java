@@ -17,6 +17,7 @@ import java.util.List;
 class PriceListAdapter extends RecyclerView.Adapter<PriceListAdapter.ViewHolder> {
     private List<PriceData> dataset;
     private Context context;
+    private View.OnClickListener itemClickListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView storeName;
@@ -47,7 +48,7 @@ class PriceListAdapter extends RecyclerView.Adapter<PriceListAdapter.ViewHolder>
     @Override
     public PriceListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_price_list, parent, false);
-
+        v.setOnClickListener(itemClickListener);
         return new ViewHolder(v);
     }
 
@@ -69,5 +70,9 @@ class PriceListAdapter extends RecyclerView.Adapter<PriceListAdapter.ViewHolder>
         public int compare(PriceData price, PriceData p1) {
             return Long.compare(p1.price.amount, price.price.amount);
         }
+    }
+
+    public void setItemClickListener(View.OnClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
     }
 }
