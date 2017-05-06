@@ -75,6 +75,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+
         }
 
         @Override
