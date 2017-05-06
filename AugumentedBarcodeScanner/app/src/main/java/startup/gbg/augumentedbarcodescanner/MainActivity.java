@@ -30,7 +30,14 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends Activity {
     private TextureView textureView;
@@ -45,6 +52,7 @@ public class MainActivity extends Activity {
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
     private BarcodeDetector detector;
+    private API service;
 
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         int counter = 0;
@@ -126,6 +134,28 @@ public class MainActivity extends Activity {
             Toast.makeText(MainActivity.this, "Could not set up barcode detector!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://johanssonjohn.com:5000/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        service = retrofit.create(API.class);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Call<LinkedList<Product>> productCall =  service.listByGTIN("07310350109906");
+                try {
+                    LinkedList<Product> products = productCall.execute().body();
+                    Log.d(TAG, "Hittade : "+products.size() + " produkter yooo!");
+                }catch (IOException e){
+                    Log.d(TAG, "N[got gick fel yoo: "+e.getMessage());
+                }
+            }
+        }).start();
+
+
     }
 
     protected void createCameraPreview() {
