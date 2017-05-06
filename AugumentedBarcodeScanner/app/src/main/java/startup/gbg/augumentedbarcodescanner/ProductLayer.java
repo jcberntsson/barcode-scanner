@@ -1,7 +1,6 @@
 package startup.gbg.augumentedbarcodescanner;
 
 import android.content.Context;
-import android.media.Image;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +28,7 @@ public class ProductLayer extends RelativeLayout {
     ScoreView healthScoreView;
     ScoreView environmentScoreView;
     ScoreView socialScoreView;
-    ImageView economicScoreView;
+    ScoreView economicScoreView;
     TextView productTitle;
     PricesLayer pricesLayer;
     private API backendService;
@@ -66,7 +65,8 @@ public class ProductLayer extends RelativeLayout {
         socialScoreView = (ScoreView) findViewById(R.id.socialScore);
         socialScoreView.setScoreType(SOCIAL);
 
-        economicScoreView = (ImageView) findViewById(R.id.economicScore);
+        economicScoreView = (ScoreView) findViewById(R.id.economicScore);
+        economicScoreView.setScoreType(ECONOMY);
 
 
         productTitle = (TextView) findViewById(R.id.productTitle);
@@ -78,6 +78,7 @@ public class ProductLayer extends RelativeLayout {
         healthScoreView.setScore(product.gtin.substring(12,13));
         environmentScoreView.setScore(product.gtin.substring(11,12));
         socialScoreView.setScore(product.gtin.substring(10,11));
+        economicScoreView.setScore(product.gtin.substring(9,10s));
         productTitle.setText(product.name);
     }
 
