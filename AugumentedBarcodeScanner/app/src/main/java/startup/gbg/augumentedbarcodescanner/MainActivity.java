@@ -48,10 +48,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class MainActivity extends Activity {
-    private TextureView textureView;
     private String TAG = "MainActivity";
 
-    private String cameraId;
+    private TextureView textureView;
     protected CameraDevice cameraDevice;
     protected CameraCaptureSession cameraCaptureSessions;
     protected CaptureRequest.Builder captureRequestBuilder;
@@ -68,21 +67,16 @@ public class MainActivity extends Activity {
     private boolean mIsPaused = false;
 
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
-        int surfaceUpdates = 0;
+        long surfaceUpdates = 0;
 
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            //open your camera here
-            Log.d(TAG, "onSurfaceTextureAvailable");
-
             if (!mIsPaused)
                 openCamera();
         }
 
         @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-            // Transform you image captured size according to the surface width and height
-        }
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) { }
 
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
@@ -91,7 +85,6 @@ public class MainActivity extends Activity {
 
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
             if (++surfaceUpdates % 10 == 0)
                 bitmapsToProcess.add(textureView.getBitmap());
         }
@@ -123,6 +116,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Enable immersive mode
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -135,13 +129,13 @@ public class MainActivity extends Activity {
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
 
-        detector =
-                new BarcodeDetector.Builder(getApplicationContext())
+        //
+        detector = new BarcodeDetector.Builder(getApplicationContext())
                         .setBarcodeFormats(Barcode.EAN_13 | Barcode.EAN_8)
                         .build();
         if(!detector.isOperational()){
             Toast.makeText(MainActivity.this, "Could not set up barcode detector!", Toast.LENGTH_SHORT).show();
-            return;
+            finish();
         }
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -253,9 +247,9 @@ public class MainActivity extends Activity {
 
     private void openCamera() {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        Log.e(TAG, "is camera open");
+        Log.e(TAG, "openCamera");
         try {
-            cameraId = manager.getCameraIdList()[0];
+            String cameraId = manager.getCameraIdList()[0];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
@@ -267,9 +261,9 @@ public class MainActivity extends Activity {
             }
             manager.openCamera(cameraId, stateCallback, null);
         } catch (CameraAccessException e) {
+            Log.e(TAG, "openCamera error");
             e.printStackTrace();
         }
-        Log.e(TAG, "openCamera X");
     }
 
     @Override
@@ -277,7 +271,7 @@ public class MainActivity extends Activity {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 // close the app
-                Toast.makeText(MainActivity.this, "Sorry!!!, you can't use this app without granting permission", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "This app can not be used without camera permission", Toast.LENGTH_LONG).show();
                 finish();
             }
         }
