@@ -234,8 +234,14 @@ public class MainActivity extends Activity {
                     if(products.size()>0){
                         Log.d(TAG, "Hittade : "+products.get(0).name);
                         productLayer.setProduct(products.get(0));
+                    }else{
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getBaseContext(), "Yo, this product doesn't exists man!!", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
-
                 }catch (IOException e){
                     Log.d(TAG, "N[got gick fel yoo: "+e.getMessage());
                 }
