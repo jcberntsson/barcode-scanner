@@ -233,7 +233,13 @@ public class MainActivity extends Activity {
 
                     if(products.size()>0){
                         Log.d(TAG, "Hittade : "+products.get(0).name);
-                        productLayer.setProduct(products.get(0));
+                        final Product product = products.get(0);
+                        productLayer.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                productLayer.setProduct(product);
+                            }
+                        });
                     }
 
                 }catch (IOException e){
