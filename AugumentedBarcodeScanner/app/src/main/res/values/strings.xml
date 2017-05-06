@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AugumentedBarcodeScanner</string>
+    <string name="take_picture">Capture</string>
+</resources>
