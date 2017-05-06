@@ -56,8 +56,13 @@ class PriceListAdapter extends RecyclerView.Adapter<PriceListAdapter.ViewHolder>
     public void onBindViewHolder(ViewHolder holder, int position) {
         PriceData price = dataset.get(position);
 
-        holder.storeName.setText(price.store.chain.name());
-        holder.price.setText(price.price.amount + "");
+        double pricing = price.price.amount / 100.0;
+        String formattedPrice = String.format("%.2f", pricing);
+        String name = price.store.chain.name().toLowerCase();
+        name = name.substring(0, 1).toUpperCase() + name.substring(1);
+
+        holder.storeName.setText(name);
+        holder.price.setText("" + formattedPrice + ":-");
     }
 
     @Override

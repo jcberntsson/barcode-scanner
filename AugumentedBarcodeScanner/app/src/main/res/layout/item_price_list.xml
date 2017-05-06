@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:background="#77000000"
-    android:layout_height="60dp">
+    android:background="#AA000000"
+    android:paddingLeft="18sp"
+    android:paddingRight="18sp"
+    android:layout_height="50dp">
 
     <TextView
         android:id="@+id/storeName"
@@ -13,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:gravity="center"
-        android:textSize="24sp"
+        android:textSize="18sp"
         tools:text="Willys" />
 
     <TextView
@@ -23,6 +25,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:gravity="center"
-        android:textSize="24sp"
-        tools:text="1235 kr" />
+        android:textSize="16sp"
+        tools:text="12.30 kr" />
 </RelativeLayout>
