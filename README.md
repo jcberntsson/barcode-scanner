@@ -1,14 +1,33 @@
-# bAR
-Barcode enabled Augumented Reality.
+# bAR <img src="documentation/images/barcode.png" width="30">
+Barcode scanning with Augmented Reality.
 
-## What
-bAR scans the enviroment using the camera and will display information of the products it encounters. The information is compiled into four major sections: environment, social impacts, pricing, and nutrional value. 
+bAR scans the enviroment using the camera and will display details of the products in its view. The information is compiled into four major sections: environmental impact <img src="documentation/images/environment_icon.png" width="16">, social impact <img src="documentation/images/social_icon.png" width="16">, pricing <img src="documentation/images/economy_icon.png" width="16">, and nutrional value <img src="documentation/images/carrot_icon.png" width="16">.
 
-## Why
-During shopping there is not enough time to compare the products in a meaningful way, and information such as enviromental and social impacts is not often included. This is where bAR fits in, while running through the shop it is easy to just point your phone towards the products and get a snapshot of the most important information needed to choose the right product. 
+## About
+This project was created for Gothenburg Startup Hack the 6th of May 2017 and won the Jury's award and the Peoples' award.
 
-## Why "augumented"?
-Common barcode scanners usually scans the environment and then switch view to display the information, which takes too much time. This is why bAR use augumented reality to more efficiently display the information. 
+## Development
+* Native Android application
+* Camera view using the new camera2 Google API
+* Barcode scanning using Google Vision API
+* API calls using [Square Retrofit](http://square.github.io/retrofit/)
+* Augmented Reality effects using Android layout overlays
 
-## Pitch
-The point of bAR is to streamline the shopping experience, with an easy and fast barcode scanner. The product information is compiled into four sections: environmental impact, social impact, nutrional value, and pricing. The details are displayed in an inline graphical interface creating an augumented reality experience, which enables the user to scan multiple products in a fast sequence for comparison. 
+## Contributors
+| Name         		|
+| ----------------- |
+| John Johansson    |
+| Joakim Berntsson  |
+| Simon Arneson 	|
+
+## Screenshots
+The screenshots below are of the three states of the application: startup, scanning, and price list.
+
+### Startup
+<img src="documentation/screenshots/startup.png" width="300">
+
+### Scanning
+<img src="documentation/screenshots/after_scan.png" width="300">
+
+### Price list
+<img src="documentation/screenshots/price_list.png" width="300">
